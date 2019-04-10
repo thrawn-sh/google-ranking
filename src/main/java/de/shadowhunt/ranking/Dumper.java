@@ -44,17 +44,18 @@ import org.jsoup.select.Elements;
 
 public class Dumper {
 
-    private static final String BASE = "https://www.google.de";
-
     private static final String CHARSET = StandardCharsets.UTF_8.name();
 
     private final File base;
+
+    private final String google;
 
     private final int maxPages;
 
     private final String query;
 
-    public Dumper(final File base, final String query, final int maxPages) {
+    public Dumper(final URI google, final String query, final int maxPages, final File base) {
+        this.google = google.toString();
         this.base = base;
         this.query = query;
         this.maxPages = maxPages;
@@ -140,7 +141,7 @@ public class Dumper {
             if (StringUtils.isBlank(href)) {
                 continue;
             }
-            return URI.create(BASE + href);
+            return URI.create(google + href);
         }
         return null;
     }
@@ -153,7 +154,7 @@ public class Dumper {
             if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
                 final HttpEntity entity = response.getEntity();
                 try (InputStream content = entity.getContent()) {
-                    return Jsoup.parse(content, CHARSET, BASE);
+                    return Jsoup.parse(content, CHARSET, google);
                 }
             }
         }

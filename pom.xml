@@ -62,14 +62,6 @@
         <tag>HEAD</tag>
         <url>https://gitlab.shadowhunt.de/open-source/google-ranking</url>
     </scm>
-
-    <distributionManagement>
-        <repository>
-            <id>sonatype</id>
-            <name>Sonatype (Maven Central) Staging Repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-        </repository>
-    </distributionManagement>
     <!-- }}}1 -->
 
     <properties>
@@ -78,6 +70,7 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <version.slf4j>1.7.25</version.slf4j>
         <version.spotbugs>3.1.10</version.spotbugs>
     </properties>
 
@@ -101,9 +94,31 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>net.sf.jopt-simple</groupId>
+            <artifactId>jopt-simple</artifactId>
+            <version>5.0.4</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${version.slf4j}</version>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${version.slf4j}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${version.slf4j}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -247,6 +262,28 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>assemble-all</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <index>true</index>
+                        <manifestEntries>
+                            <Built-By>${project.organization.name}</Built-By>
+                            <Main-Class>de.shadowhunt.ranking.Main</Main-Class>
+                        </manifestEntries>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -304,6 +341,10 @@
                 <configuration>
                     <failOnWarning>true</failOnWarning>
                     <outputXML>true</outputXML>
+                    <usedDependencies>
+                        <usedDependency>org.slf4j:jcl-over-slf4j</usedDependency>
+                        <usedDependency>org.slf4j:slf4j-api</usedDependency>
+                    </usedDependencies>
                 </configuration>
             </plugin>
             <plugin>
@@ -346,24 +387,6 @@
                 <configuration>
                     <argLine>${jacoco.agent.argLineIT}</argLine>
                     <printSummary>false</printSummary>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <!-- shadowhunt package -->
-                    <keyname>77103E0B</keyname>
                 </configuration>
             </plugin>
             <plugin>
