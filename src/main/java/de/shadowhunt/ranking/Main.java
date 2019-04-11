@@ -59,7 +59,7 @@ public class Main {
     }
 
     private static OptionSpec<String> createDomainsOption(final OptionParser parser) {
-        final List<String> options = Arrays.asList("doamin", "d");
+        final List<String> options = Arrays.asList("domains", "d");
         final OptionSpecBuilder builder = parser.acceptsAll(options, "list of domains");
         ArgumentAcceptingOptionSpec<String> optionSpec = builder.withRequiredArg();
         optionSpec = optionSpec.describedAs("domains");
