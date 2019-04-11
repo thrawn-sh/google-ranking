@@ -37,8 +37,8 @@ public class HeaderReporter extends AbstractReporter {
 
     @Override
     public void generate(final PrintWriter writer) {
-        writer.println("Übersicht");
-        writer.println("=========");
+        writer.println("Overview");
+        writer.println("========");
         writer.printf("  Query: %s%n", query);
         writer.printf("   Date: %s%n", date);
         writer.printf("Results: %d%n", data.size());
