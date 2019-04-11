@@ -210,7 +210,7 @@ public class Main {
         final File report = new File(folder, "report.txt");
         try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(Files.newOutputStream(report.toPath()), "UTF-8"))) {
             final Date date = getCreationDate(folder);
-            new HeaderReporter(query, date, data).generate(writer);
+            new HeaderReporter(google, query, maxPages, date, hosts, data).generate(writer);
             new PageReporter(hosts, data).generate(writer);
             new StatisticReporter(hosts, data).generate(writer);
         }
