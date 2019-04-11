@@ -18,10 +18,14 @@
 package de.shadowhunt.ranking;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.FileTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
@@ -173,14 +177,18 @@ public class Main {
         this.hosts = hosts;
     }
 
-    private Date getCreationDate(final File folder) {
+    private Date getCreationDate(final File folder) throws IOException {
         if (folder.exists()) {
-            return new Date(folder.lastModified());
+            final Path path = folder.toPath();
+            final BasicFileAttributes fileAttributes = Files.readAttributes(path, BasicFileAttributes.class);
+            final FileTime creationTime = fileAttributes.creationTime();
+            final long millis = creationTime.toMillis();
+            return new Date(millis);
         }
         return new Date(0L);
     }
 
-    private boolean isDatabaseCurrent(final File folder) {
+    private boolean isDatabaseCurrent(final File folder) throws IOException {
         final Date creationDate = getCreationDate(folder);
         final Date now = new Date();
         final long age = (now.getTime() - creationDate.getTime());
