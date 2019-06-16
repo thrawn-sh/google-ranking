@@ -133,7 +133,7 @@ public class StatisticReporter extends AbstractReporter {
             final String prefix = getPrefix(cluster.name);
             writer.printf("%s %s%n", prefix, cluster.name);
             final int advResults = countAdvertisements(cluster.results);
-            writer.printf("   -      total: %d (ADV: %d)%n", cluster.results.size(), advResults);
+            writer.printf("   -     total: %d (ADV: %d)%n", cluster.results.size(), advResults);
             writer.printf("   - best rank: %d%n", cluster.results.first().getRank());
             writer.printf("   - best page: %d%n", cluster.results.first().getPage());
         }
